@@ -45,27 +45,29 @@ int find (const char* findstr, const char* str)
     if (findstrlen == 0)
     {
         found_index = 0;
-        goto exit;
     }
-    int i, j;
-    unsigned int strstrlen = strlen(str);
-    for (i=0; i<strstrlen; ++i)
+    else
     {
-        if (str[i] == findstr[0])
+        int i, j;
+        unsigned int strstrlen = strlen(str);
+        for (i=0; i<strstrlen; ++i)
         {
-            found_index = i;
-            for (j=1; j<findstrlen; ++j)
+            if (str[i] == findstr[0])
             {
-                if (findstr[j] != str[++i])
+                found_index = i;
+                for (j=1; j<findstrlen; ++j)
                 {
-                    found_index = -1;
-                    break;
+                    if (findstr[j] != str[++i])
+                    {
+                        found_index = -1;
+                        break;
+                    }
                 }
+                break;
             }
-            break;
         }
     }
-    exit: return found_index;
+    return found_index;
 }
 
 int indexof (const char* substr, const char* str)
@@ -79,30 +81,32 @@ int rindexof (const char* substr, const char* str)
     if (substrlen == 0)
     {
         found_index = 0;
-        goto exit;
     }
-    int i, j, k;
-    unsigned int strstrlen = strlen(str);
-    for (i=strstrlen-1; i>=0; --i)
+    else
     {
-        if (str[i] == substr[0])
+        int i, j, k;
+        unsigned int strstrlen = strlen(str);
+        for (i=strstrlen-1; i>=0; --i)
         {
-            found_index = k = i;
-            for (j=1; j<substrlen; ++j)
+            if (str[i] == substr[0])
             {
-                if (substr[j] != str[++k])
+                found_index = k = i;
+                for (j=1; j<substrlen; ++j)
                 {
-                    found_index = -1;
+                    if (substr[j] != str[++k])
+                    {
+                        found_index = -1;
+                        break;
+                    }
+                }
+                if (j==substrlen)
+                {
                     break;
                 }
             }
-            if (j==substrlen)
-            {
-                break;
-            }
         }
     }
-    exit: return found_index;
+    return found_index;
 }
 
 char* substring (int start, int end, const char* str)
