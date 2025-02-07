@@ -10,8 +10,9 @@ unsigned int endswith (const char* endstr, const char* str)
 
 unsigned int startswith (const char* startstr, const char* str)
 {
-    int len_startstr = strlen(startstr), i = -1;
-    while (i < len_startstr && startstr[++i] == str[i]);
+    int len_startstr = strlen(startstr), i = 0;
+    while (i < len_startstr && startstr[i] == str[i])
+        i++;
     return (i == len_startstr);
 }
 
