@@ -1,26 +1,23 @@
 #include <stdlib.h>
 #include "strutil.h"
 
-unsigned int endswith (const char* endstr, const char* str)
-{
-    int j = strlen(endstr), i = strlen(str);
-    while (j >= 0 && endstr[--j] == str[--i]);
-    return (j == -1);
-}
-
-unsigned int startswith (const char* startstr, const char* str)
-{
-    int len_startstr = strlen(startstr), i = 0;
-    while (i < len_startstr && startstr[i] == str[i])
-        i++;
-    return (i == len_startstr);
-}
-
+// Perfected
 unsigned int equals (const char* str1, const char* str2)
 {
     return (strcmp(str1, str2) == 0);
 }
 
+// Perfected
+char* copy (const char* str)
+{
+    char* strcopy = (char*)malloc((strlen(str)+1)*sizeof(char));
+    if (strcopy == NULL)
+        return NULL;
+    strcpy(strcopy, str);
+    return strcopy;
+}
+
+// Perfected
 void reverse (char* str)
 {
     unsigned int len = strlen(str);
@@ -32,76 +29,69 @@ void reverse (char* str)
     }
 }
 
+// Perfected
 char* reversecopy (const char* str)
 {
-    char* revstr = (char*)malloc(sizeof(str));
-    strcpy(revstr, str);
-    reverse(revstr);
-    return revstr;
+    char* newstr = copy(str);
+    reverse(newstr);
+    return newstr;
 }
 
-int find (const char* findstr, const char* str)
+unsigned int startswith (const char* startstr, const char* str)
 {
-    unsigned int findstrlen = strlen(findstr), found_index = -1;
+    size_t len_startstr = strlen(startstr), i = 0;
+    while (i < len_startstr && startstr[i] == str[i])
+        i++;
+    return (i == len_startstr);
+}
+
+unsigned int endswith (const char* endstr, const char* str)
+{
+    ssize_t j = strlen(endstr), i = strlen(str);
+    while (j >= 0 && endstr[--j] == str[--i]);
+    return (j == -1);
+}
+
+ssize_t find (const char* findstr, const char* str)
+{
+    if (equals(str, ""))
+    {
+        if (equals(findstr, ""))
+            return 0;
+        else
+            return -1;
+    }
+    
+    ssize_t findstrlen = strlen(findstr), found_index = -1;
+    ssize_t strstrlen = strlen(str);
+    
+    if (findstrlen > strstrlen)
+    {
+        return -1;
+    }
     if (findstrlen == 0)
     {
         found_index = 0;
     }
     else
     {
-        int i, j;
-        unsigned int strstrlen = strlen(str);
+        ssize_t i, j, k, count = 0;
         for (i=0; i<strstrlen; ++i)
         {
             if (str[i] == findstr[0])
             {
-                found_index = i;
+                count = 0;
+                k = i;
                 for (j=1; j<findstrlen; ++j)
                 {
-                    if (findstr[j] != str[++i])
-                    {
-                        found_index = -1;
+                    if (findstr[j] != str[++k])
                         break;
-                    }
+                    else
+                        count++;
                 }
-                break;
-            }
-        }
-    }
-    return found_index;
-}
-
-int indexof (const char* substr, const char* str)
-{
-    return find(substr, str);
-}
-
-int rindexof (const char* substr, const char* str)
-{
-    unsigned int substrlen = strlen(substr), found_index = -1;
-    if (substrlen == 0)
-    {
-        found_index = 0;
-    }
-    else
-    {
-        int i, j, k;
-        unsigned int strstrlen = strlen(str);
-        for (i=strstrlen-1; i>=0; --i)
-        {
-            if (str[i] == substr[0])
-            {
-                found_index = k = i;
-                for (j=1; j<substrlen; ++j)
+                if (count == findstrlen-1)
                 {
-                    if (substr[j] != str[++k])
-                    {
-                        found_index = -1;
-                        break;
-                    }
-                }
-                if (j==substrlen)
-                {
+                    found_index = i;
                     break;
                 }
             }
@@ -110,10 +100,42 @@ int rindexof (const char* substr, const char* str)
     return found_index;
 }
 
-char* substring (int start, int end, const char* str)
+ssize_t indexof (const char* substr, const char* str)
 {
+    return find(substr, str);
+}
+
+ssize_t rindexof (const char* substr, const char* str)
+{
+    char* revsubstr = reversecopy(substr);
+    char* revstr = reversecopy(str);
+    printf ("len(revsubstr): %d\n", strlen(revsubstr));
+    printf ("%s %s\n", revsubstr, revstr);
+    ssize_t found_index = indexof(revsubstr, revstr);
+    if (found_index != -1)
+        found_index = (strlen(revstr)-found_index)-strlen(revsubstr);
+    free(revsubstr);
+    free(revstr);
+    return found_index;
+}
+
+// Perfected
+char* substring (size_t start, size_t end, const char* str)
+{
+    if (equals(str, ""))
+    {
+        if (start == 0 && end == 0)
+            return (char*)calloc(1, sizeof(char));
+        else
+            return NULL;
+    }
+    size_t maxindex = strlen(str)-1;
+    if (start > maxindex || end > maxindex || start > end)
+        return NULL;
     char* substr = (char*)malloc((end-start+1)*sizeof(char));
-    for (int i=start, j=0; i<end; ++i, ++j)
+    if (substr == NULL)
+        return NULL;
+    for (size_t i=start, j=0; i<end; ++i, ++j)
     {
         substr[j] = str[i];
     }
