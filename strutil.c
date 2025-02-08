@@ -2,80 +2,86 @@
 #include "strutil.h"
 
 // Perfected
-unsigned int equals (const char* str1, const char* str2)
+unsigned int equals (const char* string1, const char* string2)
 {
-    return (strcmp(str1, str2) == 0);
+    return (strcmp(string1, string2) == 0);
 }
 
 // Perfected
-char* copy (const char* str)
+char* copy (const char* string)
 {
-    char* strcopy = (char*)malloc((strlen(str)+1)*sizeof(char));
+    char* strcopy = (char*)malloc((strlen(string)+1)*sizeof(char));
     if (strcopy == NULL)
         return NULL;
-    strcpy(strcopy, str);
+    strcpy(strcopy, string);
     return strcopy;
 }
 
 // Perfected
-void reverse (char* str)
+void reverse (char* string)
 {
-    unsigned int len = strlen(str);
+    unsigned int len = strlen(string);
     for (unsigned int i=0; i<len/2; ++i)
     {
-        str[i] = str[i] + str[len-(i+1)];
-        str[len-(i+1)] = str[i] - str[len-(i+1)];
-        str[i] = str[i] - str[len-(i+1)];
+        string[i] = string[i] + string[len-(i+1)];
+        string[len-(i+1)] = string[i] - string[len-(i+1)];
+        string[i] = string[i] - string[len-(i+1)];
     }
 }
 
 // Perfected
-char* reversecopy (const char* str)
+char* reversecopy (const char* string)
 {
-    char* newstr = copy(str);
-    reverse(newstr);
-    return newstr;
+    char* newstring = copy(string);
+    reverse(newstring);
+    return newstring;
 }
 
-unsigned int startswith (const char* startstr, const char* str)
+// Perfected
+unsigned int startswith (const char* pattern, const char* string)
 {
-    size_t len_startstr = strlen(startstr), i = 0;
-    while (i < len_startstr && startstr[i] == str[i])
+    if (*pattern == 0)
+        return 1;
+    size_t patternlen = strlen(pattern), i = 0;
+    while (i < patternlen && pattern[i] == string[i])
         i++;
-    return (i == len_startstr);
+    return (i == patternlen);
 }
 
-unsigned int endswith (const char* endstr, const char* str)
+// Perfected
+unsigned int endswith (const char* pattern, const char* string)
 {
-    ssize_t j = strlen(endstr), i = strlen(str);
-    while (j >= 0 && endstr[--j] == str[--i]);
+    if (*pattern == 0)
+        return 1;
+    ssize_t j = strlen(pattern), i = strlen(string);
+    while (j >= 0 && pattern[--j] == string[--i]);
     return (j == -1);
 }
 
-ssize_t find (const char* findstr, const char* str)
+// TODO: Use Boyer-Moore algorithm with the current brute-force one and
+// implement a hybrid search algorithm
+ssize_t find (const char* pattern, const char* string)
 {
-    ssize_t findstrlen = strlen(findstr);
-    ssize_t strstrlen = strlen(str);
-    if (findstrlen > strstrlen)
-        return -1;
-    if (strstrlen==0 && findstrlen==0)
+    if (*pattern==0)
         return 0;
-    else if (strstrlen==0 && findstrlen!=0)
+    if (*string==0 && *pattern!=0)
         return -1;
-    else if (strstrlen!=0 && findstrlen==0)
-        return 0;
+    ssize_t patternlen = strlen(pattern);
+    ssize_t stringlen = strlen(string);
+    if (patternlen > stringlen)
+        return -1;
     ssize_t i, j, k, found_index = -1;
-    for (i=0; i<strstrlen; ++i)
+    for (i=0; i<stringlen; ++i)
     {
-        if (str[i] == findstr[0])
+        if (string[i] == pattern[0])
         {
             k = i;
-            for (j=1; j<findstrlen; ++j)
+            for (j=1; j<patternlen; ++j)
             {
-                if (findstr[j] != str[++k])
+                if (pattern[j] != string[++k])
                     break;
             }
-            if (j == findstrlen)
+            if (j == patternlen)
             {
                 found_index = i;
                 break;
@@ -85,34 +91,36 @@ ssize_t find (const char* findstr, const char* str)
     return found_index;
 }
 
-ssize_t indexof (const char* substr, const char* str)
+// Perfected
+ssize_t indexof (const char* pattern, const char* string)
 {
-    return find(substr, str);
+    return find(pattern, string);
 }
 
-ssize_t rindexof (const char* substr, const char* str)
+// Perfected
+ssize_t rindexof (const char* pattern, const char* string)
 {
-    char* revsubstr = reversecopy(substr);
-    char* revstr = reversecopy(str);
-    ssize_t found_index = indexof(revsubstr, revstr);
+    char* revpattern = reversecopy(pattern);
+    char* revstring = reversecopy(string);
+    ssize_t found_index = indexof(revpattern, revstring);
     if (found_index != -1)
-        found_index = (strlen(revstr)-found_index)-strlen(revsubstr);
-    free(revsubstr);
-    free(revstr);
+        found_index = (strlen(revstring)-found_index)-strlen(revpattern);
+    free(revpattern);
+    free(revstring);
     return found_index;
 }
 
 // Perfected
-char* substring (size_t start, size_t end, const char* str)
+char* substring (size_t start, size_t end, const char* string)
 {
-    if (equals(str, ""))
+    if (equals(string, ""))
     {
         if (start == 0 && end == 0)
             return (char*)calloc(1, sizeof(char));
         else
             return NULL;
     }
-    size_t maxindex = strlen(str)-1;
+    size_t maxindex = strlen(string)-1;
     if (start > maxindex || end > maxindex || start > end)
         return NULL;
     char* substr = (char*)malloc((end-start+1)*sizeof(char));
@@ -120,7 +128,7 @@ char* substring (size_t start, size_t end, const char* str)
         return NULL;
     for (size_t i=start, j=0; i<end; ++i, ++j)
     {
-        substr[j] = str[i];
+        substr[j] = string[i];
     }
     substr[end-start] = 0;
     return substr;
