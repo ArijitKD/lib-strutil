@@ -54,46 +54,31 @@ unsigned int endswith (const char* endstr, const char* str)
 
 ssize_t find (const char* findstr, const char* str)
 {
-    if (equals(str, ""))
-    {
-        if (equals(findstr, ""))
-            return 0;
-        else
-            return -1;
-    }
-    
-    ssize_t findstrlen = strlen(findstr), found_index = -1;
+    ssize_t findstrlen = strlen(findstr);
     ssize_t strstrlen = strlen(str);
-    
     if (findstrlen > strstrlen)
-    {
         return -1;
-    }
-    if (findstrlen == 0)
+    if (strstrlen==0 && findstrlen==0)
+        return 0;
+    else if (strstrlen==0 && findstrlen!=0)
+        return -1;
+    else if (strstrlen!=0 && findstrlen==0)
+        return 0;
+    ssize_t i, j, k, found_index = -1;
+    for (i=0; i<strstrlen; ++i)
     {
-        found_index = 0;
-    }
-    else
-    {
-        ssize_t i, j, k, count = 0;
-        for (i=0; i<strstrlen; ++i)
+        if (str[i] == findstr[0])
         {
-            if (str[i] == findstr[0])
+            k = i;
+            for (j=1; j<findstrlen; ++j)
             {
-                count = 0;
-                k = i;
-                for (j=1; j<findstrlen; ++j)
-                {
-                    if (findstr[j] != str[++k])
-                        break;
-                    else
-                        count++;
-                }
-                if (count == findstrlen-1)
-                {
-                    found_index = i;
+                if (findstr[j] != str[++k])
                     break;
-                }
+            }
+            if (j == findstrlen)
+            {
+                found_index = i;
+                break;
             }
         }
     }
@@ -109,8 +94,6 @@ ssize_t rindexof (const char* substr, const char* str)
 {
     char* revsubstr = reversecopy(substr);
     char* revstr = reversecopy(str);
-    printf ("len(revsubstr): %d\n", strlen(revsubstr));
-    printf ("%s %s\n", revsubstr, revstr);
     ssize_t found_index = indexof(revsubstr, revstr);
     if (found_index != -1)
         found_index = (strlen(revstr)-found_index)-strlen(revsubstr);
