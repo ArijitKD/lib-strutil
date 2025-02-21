@@ -1,6 +1,10 @@
 #ifndef STRUTIL_H
     #define STRUTIL_H
 
+    #ifdef __cplusplus
+        extern "C" {
+    #endif
+
     #ifdef ENABLE_STRUTIL_WCHAR
         #include <wchar.h>
         #define STRLEN wcslen
@@ -42,7 +46,6 @@
         #endif
     #endif
 
-
     unsigned int equals (const STRUTIL_CHARTYPE* string1, const STRUTIL_CHARTYPE* string2);
     STRUTIL_CHARTYPE* copy (const STRUTIL_CHARTYPE* string);
     void reverse (STRUTIL_CHARTYPE* string);
@@ -53,4 +56,8 @@
     ssize_t indexof (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string);
     ssize_t rindexof (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string);
     STRUTIL_CHARTYPE* substring (size_t start, size_t end, const STRUTIL_CHARTYPE* string);
+
+    #ifdef __cplusplus
+        }
+    #endif
 #endif
