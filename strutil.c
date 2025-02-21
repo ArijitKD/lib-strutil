@@ -2,7 +2,7 @@
 #include "strutil.h"
 
 // Perfected
-unsigned int equals (const LIBC_STRUTIL_CHARTYPE* string1, const LIBC_STRUTIL_CHARTYPE* string2)
+unsigned int equals (const STRUTIL_CHARTYPE* string1, const STRUTIL_CHARTYPE* string2)
 {
     if (string1 == NULL || string2 == NULL)
         return (string1 == string2);
@@ -10,11 +10,11 @@ unsigned int equals (const LIBC_STRUTIL_CHARTYPE* string1, const LIBC_STRUTIL_CH
 }
 
 // Perfected
-LIBC_STRUTIL_CHARTYPE* copy (const LIBC_STRUTIL_CHARTYPE* string)
+STRUTIL_CHARTYPE* copy (const STRUTIL_CHARTYPE* string)
 {
     if (string == NULL)
         return NULL;
-    LIBC_STRUTIL_CHARTYPE* strcopy = (LIBC_STRUTIL_CHARTYPE*)malloc((STRLEN(string)+1)*sizeof(LIBC_STRUTIL_CHARTYPE));
+    STRUTIL_CHARTYPE* strcopy = (STRUTIL_CHARTYPE*)malloc((STRLEN(string)+1)*sizeof(STRUTIL_CHARTYPE));
     if (strcopy == NULL)
         return NULL;
     STRCPY(strcopy, string);
@@ -22,7 +22,7 @@ LIBC_STRUTIL_CHARTYPE* copy (const LIBC_STRUTIL_CHARTYPE* string)
 }
 
 // Perfected
-void reverse (LIBC_STRUTIL_CHARTYPE* string)
+void reverse (STRUTIL_CHARTYPE* string)
 {
     if (string != NULL)
     {
@@ -37,11 +37,11 @@ void reverse (LIBC_STRUTIL_CHARTYPE* string)
 }
 
 // Perfected
-LIBC_STRUTIL_CHARTYPE* reversecopy (const LIBC_STRUTIL_CHARTYPE* string)
+STRUTIL_CHARTYPE* reversecopy (const STRUTIL_CHARTYPE* string)
 {
     if (string == NULL)
         return NULL;
-    LIBC_STRUTIL_CHARTYPE* newstring = copy(string);
+    STRUTIL_CHARTYPE* newstring = copy(string);
     if (newstring == NULL)
         return NULL;
     reverse(newstring);
@@ -49,7 +49,7 @@ LIBC_STRUTIL_CHARTYPE* reversecopy (const LIBC_STRUTIL_CHARTYPE* string)
 }
 
 // Perfected
-int startswith (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYPE* string)
+int startswith (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string)
 {
     if (pattern == NULL || string == NULL)
         return -1;
@@ -65,7 +65,7 @@ int startswith (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYP
 }
 
 // Perfected
-int endswith (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYPE* string)
+int endswith (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string)
 {
     if (pattern == NULL || string == NULL)
         return -1;
@@ -82,7 +82,7 @@ int endswith (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYPE*
 
 // TODO: Use Boyer-Moore algorithm with the current brute-force one and
 // implement a hybrid search algorithm
-ssize_t find (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYPE* string)
+ssize_t find (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string)
 {
     if (pattern == NULL || string == NULL)
         return -1;
@@ -128,13 +128,13 @@ ssize_t find (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYPE*
 }
 
 // Perfected
-ssize_t indexof (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYPE* string)
+ssize_t indexof (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string)
 {
     return find(pattern, string);
 }
 
 // Perfected
-ssize_t rindexof (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHARTYPE* string)
+ssize_t rindexof (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string)
 {
     if (pattern == NULL || string == NULL)
         return -1;
@@ -156,8 +156,8 @@ ssize_t rindexof (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHART
     return -1;
 
     /*
-    LIBC_STRUTIL_CHARTYPE* revpattern = reversecopy(pattern);
-    LIBC_STRUTIL_CHARTYPE* revstring = reversecopy(string);
+    STRUTIL_CHARTYPE* revpattern = reversecopy(pattern);
+    STRUTIL_CHARTYPE* revstring = reversecopy(string);
     ssize_t found_index = indexof(revpattern, revstring);
     if (found_index != -1)
         found_index = (STRLEN(revstring)-found_index)-STRLEN(revpattern);
@@ -168,21 +168,21 @@ ssize_t rindexof (const LIBC_STRUTIL_CHARTYPE* pattern, const LIBC_STRUTIL_CHART
 }
 
 // Perfected
-LIBC_STRUTIL_CHARTYPE* substring (size_t start, size_t end, const LIBC_STRUTIL_CHARTYPE* string)
+STRUTIL_CHARTYPE* substring (size_t start, size_t end, const STRUTIL_CHARTYPE* string)
 {
     if (string == NULL)
         return NULL;
-    if (equals(string, ""))
+    if (equals(string, (STRUTIL_CHARTYPE*)""))
     {
         if (start == 0 && end == 0)
-            return (LIBC_STRUTIL_CHARTYPE*)calloc(1, sizeof(LIBC_STRUTIL_CHARTYPE));
+            return (STRUTIL_CHARTYPE*)calloc(1, sizeof(STRUTIL_CHARTYPE));
         else
             return NULL;
     }
     size_t maxindex = STRLEN(string)-1;
     if (start > maxindex || end > maxindex || start > end)
         return NULL;
-    LIBC_STRUTIL_CHARTYPE* substr = (LIBC_STRUTIL_CHARTYPE*)malloc((end-start+1)*sizeof(LIBC_STRUTIL_CHARTYPE));
+    STRUTIL_CHARTYPE* substr = (STRUTIL_CHARTYPE*)malloc((end-start+1)*sizeof(STRUTIL_CHARTYPE));
     if (substr == NULL)
         return NULL;
     for (size_t i=start, j=0; i<end; ++i, ++j)
