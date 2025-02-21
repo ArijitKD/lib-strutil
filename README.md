@@ -1,2 +1,2 @@
 # libc-strutil
-A C library that implements essential sub-routines for string operations with Java/Python - like naming conventions.
+A C library that implements essential sub-routines for string operations with Java/Python - like naming conventions with extended support for wide characters.
