@@ -53,21 +53,21 @@ extern "C"
 /*
  * Checks if two strings are equal and returns 1 if true, 0 otherwise.
  */
-bool equals (const STRUTIL_CHARTYPE* string1, const STRUTIL_CHARTYPE* string2);
+bool equals (const STRUTIL_CHARTYPE *string1, const STRUTIL_CHARTYPE *string2);
 
 /* 
  * Returns a pointer to a shallow copy of the given string. This function dynamically allocates
  * memory for the string. This memory may need to be freed by the caller to avoid memory
  * leaks. If memory allocation fails or the function receives a NULL pointer, returns NULL.
  */
-STRUTIL_CHARTYPE* copy (const STRUTIL_CHARTYPE* string);
+STRUTIL_CHARTYPE *copy (const STRUTIL_CHARTYPE *string);
 
 /*
  * Reverses the given string. This function attempts to modify the given string. Make sure
  * that the string being passed is a modifiable character array or a dynamically allocated
  * character buffer. Use reversecopy() for read-only strings.
  */
-void reverse (STRUTIL_CHARTYPE* string);
+void reverse (STRUTIL_CHARTYPE *string);
 
 /*
  * Creates a new dynamically allocated copy of the given string, reverses it, and returns
@@ -75,41 +75,41 @@ void reverse (STRUTIL_CHARTYPE* string);
  * memory leaks. If memory allocation fails or the function receives a NULL pointer,
  * returns NULL.
  */
-STRUTIL_CHARTYPE* reversecopy (const STRUTIL_CHARTYPE* string);
+STRUTIL_CHARTYPE *reversecopy (const STRUTIL_CHARTYPE *string);
 
 /*
  * Check if the given string starts with the given pattern. Returns 1 if true, 0 otherwise.
  */
-bool startswith (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string);
+bool startswith (const STRUTIL_CHARTYPE *pattern, const STRUTIL_CHARTYPE *string);
 
 /*
  * Check if the given string ends with the given pattern. Returns 1 if true, 0 otherwise.
  */
-bool endswith (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string);
+bool endswith (const STRUTIL_CHARTYPE *pattern, const STRUTIL_CHARTYPE *string);
 
 /*
  * Searches for the given pattern in the string and returns the index of the first matching character.
  * If the pattern cannot be found, returns -1.
  */
-ssize_t find (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string);
+ssize_t find (const STRUTIL_CHARTYPE *pattern, const STRUTIL_CHARTYPE *string);
 
 /*
  * Searches for the given pattern in the string and returns the index of the first matching character.
  * If the pattern cannot be found, returns -1.
  */
-ssize_t indexof (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string);
+ssize_t indexof (const STRUTIL_CHARTYPE *pattern, const STRUTIL_CHARTYPE *string);
 
 /*
  * Searches for the given pattern in the string from the right and returns the index of the first matching
  * character. If the pattern cannot be found, returns -1.
  */
-ssize_t rindexof (const STRUTIL_CHARTYPE* pattern, const STRUTIL_CHARTYPE* string);
+ssize_t rindexof (const STRUTIL_CHARTYPE *pattern, const STRUTIL_CHARTYPE *string);
 
 /*
  * Returns a pointer to a dynamically allocated character buffer containing a substring from the given string, 
  * starting with index (start) and ending with index (end - 1).
  */
-STRUTIL_CHARTYPE* substring (size_t start, size_t end, const STRUTIL_CHARTYPE* string);
+STRUTIL_CHARTYPE *substring (size_t start, size_t end, const STRUTIL_CHARTYPE *string);
 
 #ifdef __cplusplus
 }
